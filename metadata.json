@@ -1,0 +1,8 @@
+{
+  "name": "Shree Hari Jewels",
+  "description": "Latest jewelry design photo catalog and upload portal across all categories with multi-lingual support in English, Gujarati, and Hindi, advanced filtering, and instant inquiries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

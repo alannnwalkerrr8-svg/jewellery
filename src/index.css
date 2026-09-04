@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  html.dark, html.dark body {
+    background-color: #12100E;
+    color: #FAF7F2;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #F9F7F2;
+    color: #3D3732;
+    overflow-x: hidden;
+  }
+
+  html.dark body {
+    background-color: #12100E;
+    color: #FAF7F2;
+  }
+
+  h1, h2, h3, .font-serif-luxury {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-display-luxury {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+/* Custom scrollbar for Natural Tones luxury aesthetic */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #EBE5DE;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #25201C;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B38E46;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Sliding Rates Marquee Ticker (Right to Left) */
+@keyframes ticker-slide {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-rates-marquee {
+  display: flex;
+  width: max-content;
+  animation: ticker-slide 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-rates-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Natural Tones custom button and card utilities */
+.btn-gold-primary {
+  background-color: #C5A059;
+  color: #FFFFFF;
+  transition: all 0.2s ease-in-out;
+}
+.btn-gold-primary:hover {
+  background-color: #B38E46;
+}
+html.dark .btn-gold-primary {
+  background-color: #E5C378;
+  color: #1E1A17;
+}
+html.dark .btn-gold-primary:hover {
+  background-color: #D4AF37;
+}
+
+.btn-natural-secondary {
+  background-color: #F2EEE9;
+  color: #635B53;
+  border: 1px solid #D9D1C7;
+  transition: all 0.2s ease-in-out;
+}
+.btn-natural-secondary:hover {
+  background-color: #EBE5DE;
+  color: #3D3732;
+}
+html.dark .btn-natural-secondary {
+  background-color: #25201C;
+  color: #FAF7F2;
+  border-color: #3D352E;
+}
+html.dark .btn-natural-secondary:hover {
+  background-color: #332C26;
+}
+
+.natural-card {
+  background-color: #FFFFFF;
+  border: 1px solid #D9D1C7;
+  box-shadow: 0 1px 3px 0 rgba(61, 55, 50, 0.04), 0 1px 2px 0 rgba(61, 55, 50, 0.02);
+}
+html.dark .natural-card {
+  background-color: #1E1A17;
+  border-color: #3D352E;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.natural-card-subtle {
+  background-color: #FAF8F5;
+  border: 1px solid #EBE5DE;
+}
+html.dark .natural-card-subtle {
+  background-color: #25201C;
+  border-color: #332C26;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-invoice-container, #printable-invoice-container *,
+  #printable-job-card-container, #printable-job-card-container *,
+  #printable-tags-container, #printable-tags-container * {
+    visibility: visible;
+  }
+  #printable-invoice-container, #printable-job-card-container, #printable-tags-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    background: white !important;
+    color: #1c1917 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
