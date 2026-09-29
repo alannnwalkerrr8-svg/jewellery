@@ -42,6 +42,9 @@ export const SettingsModal: React.FC = () => {
     setIsHoursModalOpen,
     isUploadEnabled,
     setIsUploadEnabled,
+    liveRates,
+    setIsEditRatesModalOpen,
+    setIsRateCalculatorOpen,
   } = useJewelry();
 
   const [resetSuccess, setResetSuccess] = useState(false);
@@ -476,6 +479,40 @@ export const SettingsModal: React.FC = () => {
                 />
                 <div className="w-11 h-6 bg-[#D9D1C7] dark:bg-[#3D352E] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#D9D1C7] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C5A059] dark:peer-checked:bg-[#E5C378]"></div>
               </label>
+            </div>
+
+            {/* Quick Rate Controls inside Settings */}
+            <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[#FAF8F5] dark:bg-[#1A1613] border border-[#EBE5DE] dark:border-[#2C241E] text-xs">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-[#A67C2E] dark:text-[#E5C378]">
+                  Ahmedabad Live Rates:
+                </span>
+                <span className="text-[#3D3732] dark:text-[#FAF7F2] font-mono">
+                  22K: ₹{liveRates.gold22k.toLocaleString('en-IN')}/g • 24K: ₹{liveRates.gold24k.toLocaleString('en-IN')}/g
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSettingsOpen(false);
+                    setIsRateCalculatorOpen(true);
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-[#10B981] hover:bg-[#059669] text-white font-semibold text-[11px] transition-colors cursor-pointer"
+                >
+                  Price Calculator
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSettingsOpen(false);
+                    setIsEditRatesModalOpen(true);
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-white dark:bg-[#25201C] border border-[#D9D1C7] dark:border-[#3D352E] text-[#3D3732] dark:text-[#FAF7F2] hover:bg-[#FAF8F5] font-semibold text-[11px] transition-colors cursor-pointer"
+                >
+                  Update Rates
+                </button>
+              </div>
             </div>
           </section>
 

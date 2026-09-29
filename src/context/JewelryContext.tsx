@@ -2,6 +2,13 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { JewelryDesign, FilterState, Language, JewelryCategory, ThemeMode, WeightUnit, AhmedabadLiveRates, UserRole, ShopDetails } from '../types/jewelry';
 import { INITIAL_JEWELRY_DESIGNS } from '../data/initialDesigns';
 import { translations, Translations } from '../i18n/translations';
+import {
+  loadStoredRates,
+  saveRatesToStorage,
+  fetchLiveBullionRates,
+  getBenchmarkAhmedabadRates,
+  STORAGE_LAST_FETCH_KEY,
+} from '../services/marketRatesService';
 
 export const AHMEDABAD_SHOP_DETAILS: ShopDetails = {
   name: 'Shree Hari Jewellers',
@@ -27,21 +34,7 @@ export const AHMEDABAD_SHOP_DETAILS: ShopDetails = {
   ],
 };
 
-export const INITIAL_AHMEDABAD_RATES: AhmedabadLiveRates = {
-  city: 'Ahmedabad',
-  date: '2 September 2026',
-  gold24k: 15207,
-  gold24kChange: -207,
-  gold22k: 13940,
-  gold22kChange: -190,
-  gold18k: 11407,
-  gold18kChange: -155,
-  silverPerKg: 245000,
-  silverPerGram: 245,
-  silverChange: -1200,
-  platinumPerGram: 3850,
-  platinumChange: 15,
-};
+export const INITIAL_AHMEDABAD_RATES: AhmedabadLiveRates = getBenchmarkAhmedabadRates();
 
 export interface SuggestedHourItem {
   id: string;
@@ -67,6 +60,7 @@ interface JewelryContextType {
   isFilterDrawerOpen: boolean;
   isSettingsOpen: boolean;
   isRateCalculatorOpen: boolean;
+  isEditRatesModalOpen: boolean;
   isHoursModalOpen: boolean;
   isRoleSwitcherOpen: boolean;
   isEditModalOpen: boolean;
@@ -80,6 +74,7 @@ interface JewelryContextType {
   showLiveRates: boolean;
   categoryCounts: Record<JewelryCategory, number>;
   liveRates: AhmedabadLiveRates;
+  isRatesRefreshing: boolean;
   shopDetails: ShopDetails;
   suggestedHoursList: SuggestedHourItem[];
   
@@ -96,6 +91,10 @@ interface JewelryContextType {
   setIsFilterDrawerOpen: (open: boolean) => void;
   setIsSettingsOpen: (open: boolean) => void;
   setIsRateCalculatorOpen: (open: boolean) => void;
+  setIsEditRatesModalOpen: (open: boolean) => void;
+  updateLiveRates: (rates: Partial<AhmedabadLiveRates>) => void;
+  refreshLiveRates: () => Promise<boolean>;
+  resetLiveRatesToBenchmark: () => void;
   setIsHoursModalOpen: (open: boolean) => void;
   setIsRoleSwitcherOpen: (open: boolean) => void;
   setIsEditModalOpen: (open: boolean) => void;
@@ -362,12 +361,66 @@ export const JewelryProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isRateCalculatorOpen, setIsRateCalculatorOpen] = useState<boolean>(false);
+  const [isEditRatesModalOpen, setIsEditRatesModalOpen] = useState<boolean>(false);
   const [isHoursModalOpen, setIsHoursModalOpen] = useState<boolean>(false);
   const [isRoleSwitcherOpen, setIsRoleSwitcherOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [editingDesign, setEditingDesign] = useState<JewelryDesign | null>(null);
-  const [liveRates] = useState<AhmedabadLiveRates>(INITIAL_AHMEDABAD_RATES);
+  const [liveRates, setLiveRates] = useState<AhmedabadLiveRates>(loadStoredRates);
+  const [isRatesRefreshing, setIsRatesRefreshing] = useState<boolean>(false);
   const shopDetails = AHMEDABAD_SHOP_DETAILS;
+
+  // Rate actions
+  const updateLiveRates = (partial: Partial<AhmedabadLiveRates>) => {
+    setLiveRates((prev) => {
+      const updated: AhmedabadLiveRates = {
+        ...prev,
+        ...partial,
+      };
+      saveRatesToStorage(updated);
+      return updated;
+    });
+  };
+
+  const resetLiveRatesToBenchmark = () => {
+    const benchmark = getBenchmarkAhmedabadRates();
+    setLiveRates(benchmark);
+    saveRatesToStorage(benchmark);
+  };
+
+  const refreshLiveRates = async (): Promise<boolean> => {
+    setIsRatesRefreshing(true);
+    try {
+      const fresh = await fetchLiveBullionRates();
+      if (fresh) {
+        setLiveRates(fresh);
+        return true;
+      }
+    } catch (e) {
+      console.warn('Error refreshing live rates:', e);
+    } finally {
+      setIsRatesRefreshing(false);
+    }
+    const benchmark = getBenchmarkAhmedabadRates();
+    setLiveRates((prev) => ({
+      ...prev,
+      date: benchmark.date,
+    }));
+    return false;
+  };
+
+  // Check on mount if rates are stale or need sync
+  useEffect(() => {
+    const lastFetch = localStorage.getItem(STORAGE_LAST_FETCH_KEY);
+    const now = Date.now();
+    if (!lastFetch || now - parseInt(lastFetch, 10) > 60 * 60 * 1000) {
+      fetchLiveBullionRates().then((fresh) => {
+        if (fresh) {
+          setLiveRates(fresh);
+        }
+      });
+    }
+  }, []);
 
   // Suggested Showroom Hours
   const [suggestedHoursList, setSuggestedHoursList] = useState<SuggestedHourItem[]>(() => {
@@ -601,6 +654,7 @@ export const JewelryProvider: React.FC<{ children: React.ReactNode }> = ({ child
         showLiveRates,
         categoryCounts,
         liveRates,
+        isRatesRefreshing,
         shopDetails,
         suggestedHoursList,
         setLanguage,
@@ -615,6 +669,11 @@ export const JewelryProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setIsFilterDrawerOpen,
         setIsSettingsOpen,
         setIsRateCalculatorOpen,
+        setIsEditRatesModalOpen,
+        isEditRatesModalOpen,
+        updateLiveRates,
+        refreshLiveRates,
+        resetLiveRatesToBenchmark,
         setIsHoursModalOpen,
         setIsRoleSwitcherOpen,
         setIsEditModalOpen,

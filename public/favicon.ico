@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#2A241F" />
+      <stop offset="60%" stop-color="#1A1512" />
+      <stop offset="100%" stop-color="#0E0B09" />
+    </radialGradient>
+
+    <!-- Gold Gradients -->
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF4D0" />
+      <stop offset="35%" stop-color="#E5C378" />
+      <stop offset="70%" stop-color="#C5A059" />
+      <stop offset="100%" stop-color="#936F26" />
+    </linearGradient>
+
+    <linearGradient id="goldDark" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C5A059" />
+      <stop offset="50%" stop-color="#8E6A23" />
+      <stop offset="100%" stop-color="#5E4311" />
+    </linearGradient>
+
+    <linearGradient id="jewelGlint" x1="0%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+      <stop offset="40%" stop-color="#FFEAA7" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#C5A059" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Filter for soft glow -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Rounded Tile Backdrop -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="url(#goldLight)" stroke-width="1.8" />
+  
+  <!-- Subtle Inner Ring -->
+  <circle cx="32" cy="32" r="25" fill="none" stroke="url(#goldLight)" stroke-width="0.75" stroke-opacity="0.3" stroke-dasharray="2 3" />
+
+  <!-- Sparkling Jewelry Diamond Motif -->
+  <g filter="url(#softGlow)" transform="translate(0, 1)">
+    <!-- Facets of the Brilliant Cut Diamond -->
+    <!-- Top Table Facet -->
+    <polygon points="25,20 39,20 44,26 20,26" fill="url(#goldLight)" />
+    
+    <!-- Top Side Facets -->
+    <polygon points="20,26 25,20 20,26" fill="url(#goldDark)" />
+    <polygon points="39,20 44,26 44,26" fill="url(#goldDark)" />
+    
+    <!-- Upper Girdle Triangles -->
+    <polygon points="20,26 26,26 23,20" fill="url(#goldLight)" opacity="0.8" />
+    <polygon points="38,26 44,26 41,20" fill="url(#goldDark)" opacity="0.8" />
+
+    <!-- Center Lower Pavilion Facet -->
+    <polygon points="26,26 38,26 32,46" fill="url(#goldLight)" />
+
+    <!-- Left Pavilion Facet -->
+    <polygon points="20,26 26,26 32,46" fill="url(#goldDark)" />
+
+    <!-- Right Pavilion Facet -->
+    <polygon points="38,26 44,26 32,46" fill="url(#goldLight)" opacity="0.9" />
+
+    <!-- Brilliant Highlight Overlay on Table -->
+    <polygon points="25,20 35,20 32,25 22,25" fill="url(#jewelGlint)" />
+
+    <!-- Sparkle Stars -->
+    <!-- Top Right Sparkle -->
+    <path d="M43,15 Q43,18 40,18 Q43,18 43,21 Q43,18 46,18 Q43,18 43,15 Z" fill="#FFFFFF" />
+    <!-- Bottom Left Accent Sparkle -->
+    <path d="M19,37 Q19,39 17,39 Q19,39 19,41 Q19,39 21,39 Q19,39 19,37 Z" fill="#FFE89E" opacity="0.85" />
+    
+    <!-- Tiny Center Reflection Point -->
+    <circle cx="32" cy="28" r="1" fill="#FFFFFF" />
+  </g>
+
+  <!-- Base Inscription Monogram / Accent Under Diamond -->
+  <circle cx="32" cy="51.5" r="1.5" fill="url(#goldLight)" />
+  <line x1="24" y1="51.5" x2="29" y2="51.5" stroke="url(#goldLight)" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+  <line x1="35" y1="51.5" x2="40" y2="51.5" stroke="url(#goldLight)" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+</svg>

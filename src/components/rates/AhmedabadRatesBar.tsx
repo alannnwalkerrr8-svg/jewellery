@@ -1,16 +1,28 @@
 import React from 'react';
 import {
   TrendingDown,
+  TrendingUp,
   Calculator,
   MapPin,
   Clock,
   Sparkles,
   ExternalLink,
+  RefreshCw,
+  Edit3,
 } from 'lucide-react';
 import { useJewelry } from '../../context/JewelryContext';
 
 export const AhmedabadRatesBar: React.FC = () => {
-  const { liveRates, shopDetails, showLiveRates, setIsRateCalculatorOpen, t } = useJewelry();
+  const {
+    liveRates,
+    shopDetails,
+    showLiveRates,
+    setIsRateCalculatorOpen,
+    setIsEditRatesModalOpen,
+    refreshLiveRates,
+    isRatesRefreshing,
+    t,
+  } = useJewelry();
 
   if (!showLiveRates) return null;
 
@@ -24,29 +36,29 @@ export const AhmedabadRatesBar: React.FC = () => {
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#C5A059]/15 dark:bg-[#E5C378]/15 border border-[#C5A059]/30 dark:border-[#E5C378]/30 shrink-0">
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
             <span className="text-[11px] font-bold text-[#A67C2E] dark:text-[#E5C378] tracking-tight whitespace-nowrap">
-              {liveRates.city} Live Rates
+              {liveRates.city} Live Rates ({liveRates.date})
             </span>
           </div>
 
           {/* 22K Gold */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E2730] border border-[#EBE5DE] dark:border-[#2C3843] shadow-2xs shrink-0 text-xs">
-            <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] font-medium">22K Gold:</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E2730] border border-[#EBE5DE] dark:border-[#2C3843] shadow-2xs shrink-0 text-xs" title={`10 Grams: ₹${(liveRates.gold22k * 10).toLocaleString('en-IN')}`}>
+            <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] font-medium">22K (916):</span>
             <span className="font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
               ₹{liveRates.gold22k.toLocaleString('en-IN')}/g
             </span>
-            <span className="text-[10px] font-semibold text-[#EF4444] flex items-center">
-              {liveRates.gold22kChange} ▼
+            <span className={`text-[10px] font-semibold flex items-center ${liveRates.gold22kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+              {liveRates.gold22kChange >= 0 ? `+${liveRates.gold22kChange} ▲` : `${liveRates.gold22kChange} ▼`}
             </span>
           </div>
 
           {/* 24K Gold */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E2730] border border-[#EBE5DE] dark:border-[#2C3843] shadow-2xs shrink-0 text-xs">
-            <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] font-medium">24K Gold:</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-[#1E2730] border border-[#EBE5DE] dark:border-[#2C3843] shadow-2xs shrink-0 text-xs" title={`10 Grams: ₹${(liveRates.gold24k * 10).toLocaleString('en-IN')}`}>
+            <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] font-medium">24K:</span>
             <span className="font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
               ₹{liveRates.gold24k.toLocaleString('en-IN')}/g
             </span>
-            <span className="text-[10px] font-semibold text-[#EF4444] flex items-center">
-              {liveRates.gold24kChange} ▼
+            <span className={`text-[10px] font-semibold flex items-center ${liveRates.gold24kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+              {liveRates.gold24kChange >= 0 ? `+${liveRates.gold24kChange} ▲` : `${liveRates.gold24kChange} ▼`}
             </span>
           </div>
 
@@ -56,8 +68,8 @@ export const AhmedabadRatesBar: React.FC = () => {
             <span className="font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
               ₹{liveRates.gold18k.toLocaleString('en-IN')}/g
             </span>
-            <span className="text-[10px] font-semibold text-[#EF4444] flex items-center">
-              {liveRates.gold18kChange} ▼
+            <span className={`text-[10px] font-semibold flex items-center ${liveRates.gold18kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+              {liveRates.gold18kChange >= 0 ? `+${liveRates.gold18kChange} ▲` : `${liveRates.gold18kChange} ▼`}
             </span>
           </div>
 
@@ -67,11 +79,24 @@ export const AhmedabadRatesBar: React.FC = () => {
             <span className="font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
               ₹{liveRates.silverPerKg.toLocaleString('en-IN')}/kg
             </span>
+            <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] font-mono">
+              (₹{liveRates.silverPerGram}/g)
+            </span>
           </div>
         </div>
 
         {/* Right: Interactive Actions */}
         <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+          {/* Update Rates Modal Trigger */}
+          <button
+            onClick={() => setIsEditRatesModalOpen(true)}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#1E2730] border border-[#D9D1C7] dark:border-[#2C3843] hover:bg-[#FAF8F5] text-[#3D3732] dark:text-[#FAF7F2] font-semibold text-xs shadow-2xs transition-all cursor-pointer whitespace-nowrap"
+            title="Edit or adjust today's live rates"
+          >
+            <Edit3 className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span className="hidden sm:inline">Update Rates</span>
+          </button>
+
           {/* Open Rate Calculator Trigger */}
           <button
             onClick={() => setIsRateCalculatorOpen(true)}
@@ -100,3 +125,4 @@ export const AhmedabadRatesBar: React.FC = () => {
     </div>
   );
 };
+

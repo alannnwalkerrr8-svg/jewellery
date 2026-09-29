@@ -22,6 +22,7 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
     shopDetails,
     t,
     language,
+    setIsEditRatesModalOpen,
   } = useJewelry();
 
   const [activeMetal, setActiveMetal] = useState<'gold' | 'silver' | 'platinum'>('gold');
@@ -128,6 +129,14 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
 
           <div className="flex items-center gap-1">
             <button
+              onClick={() => setIsEditRatesModalOpen(true)}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#C5A059]/15 hover:bg-[#C5A059]/25 text-[#A67C2E] dark:text-[#E5C378] transition-colors cursor-pointer flex items-center gap-1"
+              title="Update live market rates"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Update Rates</span>
+            </button>
+            <button
               onClick={handleShare}
               className="p-2 rounded-lg text-[#7D736A] dark:text-[#8E9CA8] hover:bg-white dark:hover:bg-[#202933] transition-colors cursor-pointer"
               title="Share rates"
@@ -198,8 +207,15 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
                 <span className="text-sm sm:text-base font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono block mt-0.5">
                   ₹{liveRates.gold24k.toLocaleString('en-IN')}
                 </span>
-                <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#EF4444] mt-1 bg-[#EF4444]/10 px-1.5 py-0.2 rounded">
-                  {liveRates.gold24kChange} ▼
+                <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] block">
+                  10g: ₹{(liveRates.gold24k * 10).toLocaleString('en-IN')}
+                </span>
+                <span className={`inline-flex items-center gap-0.5 text-[10px] font-semibold mt-1 px-1.5 py-0.2 rounded ${
+                  liveRates.gold24kChange >= 0
+                    ? 'text-[#10B981] bg-[#10B981]/10'
+                    : 'text-[#EF4444] bg-[#EF4444]/10'
+                }`}>
+                  {liveRates.gold24kChange >= 0 ? `+${liveRates.gold24kChange} ▲` : `${liveRates.gold24kChange} ▼`}
                 </span>
               </div>
 
@@ -213,13 +229,20 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
                 }`}
               >
                 <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] block font-medium">
-                  22K Gold /g
+                  22K Gold /g (916)
                 </span>
                 <span className="text-sm sm:text-base font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono block mt-0.5">
                   ₹{liveRates.gold22k.toLocaleString('en-IN')}
                 </span>
-                <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#EF4444] mt-1 bg-[#EF4444]/10 px-1.5 py-0.2 rounded">
-                  {liveRates.gold22kChange} ▼
+                <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] block">
+                  10g: ₹{(liveRates.gold22k * 10).toLocaleString('en-IN')}
+                </span>
+                <span className={`inline-flex items-center gap-0.5 text-[10px] font-semibold mt-1 px-1.5 py-0.2 rounded ${
+                  liveRates.gold22kChange >= 0
+                    ? 'text-[#10B981] bg-[#10B981]/10'
+                    : 'text-[#EF4444] bg-[#EF4444]/10'
+                }`}>
+                  {liveRates.gold22kChange >= 0 ? `+${liveRates.gold22kChange} ▲` : `${liveRates.gold22kChange} ▼`}
                 </span>
               </div>
 
@@ -233,13 +256,20 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
                 }`}
               >
                 <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] block font-medium">
-                  18K Gold /g
+                  18K Gold /g (750)
                 </span>
                 <span className="text-sm sm:text-base font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono block mt-0.5">
                   ₹{liveRates.gold18k.toLocaleString('en-IN')}
                 </span>
-                <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#EF4444] mt-1 bg-[#EF4444]/10 px-1.5 py-0.2 rounded">
-                  {liveRates.gold18kChange} ▼
+                <span className="text-[10px] text-[#7D736A] dark:text-[#8E9CA8] block">
+                  10g: ₹{(liveRates.gold18k * 10).toLocaleString('en-IN')}
+                </span>
+                <span className={`inline-flex items-center gap-0.5 text-[10px] font-semibold mt-1 px-1.5 py-0.2 rounded ${
+                  liveRates.gold18kChange >= 0
+                    ? 'text-[#10B981] bg-[#10B981]/10'
+                    : 'text-[#EF4444] bg-[#EF4444]/10'
+                }`}>
+                  {liveRates.gold18kChange >= 0 ? `+${liveRates.gold18kChange} ▲` : `${liveRates.gold18kChange} ▼`}
                 </span>
               </div>
             </div>
@@ -252,14 +282,18 @@ export const AhmedabadRateCalculatorModal: React.FC = () => {
                 <span className="text-lg font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
                   ₹{liveRates.silverPerGram.toLocaleString('en-IN')} /g
                 </span>
-                <span className="text-[10px] text-[#EF4444] block mt-0.5">-1.20 ▼</span>
+                <span className={`text-[10px] block mt-0.5 ${liveRates.silverChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+                  {liveRates.silverChange >= 0 ? `+${(liveRates.silverChange / 1000).toFixed(1)} ▲` : `${(liveRates.silverChange / 1000).toFixed(1)} ▼`}
+                </span>
               </div>
               <div className="p-3.5 rounded-xl bg-[#FAF8F5] dark:bg-[#1D2731] border border-[#10B981] text-center">
                 <span className="text-[11px] text-[#7D736A] dark:text-[#8E9CA8] block">Silver / 1 Kg Bar</span>
                 <span className="text-lg font-bold text-[#3D3732] dark:text-[#FAF7F2] font-mono">
                   ₹{liveRates.silverPerKg.toLocaleString('en-IN')} /kg
                 </span>
-                <span className="text-[10px] text-[#EF4444] block mt-0.5">{liveRates.silverChange} ▼</span>
+                <span className={`text-[10px] block mt-0.5 ${liveRates.silverChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
+                  {liveRates.silverChange >= 0 ? `+${liveRates.silverChange} ▲` : `${liveRates.silverChange} ▼`}
+                </span>
               </div>
             </div>
           )}

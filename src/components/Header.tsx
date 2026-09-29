@@ -11,6 +11,8 @@ import {
   Moon,
   MapPin,
   Clock,
+  Calculator,
+  Edit3,
 } from 'lucide-react';
 import { useJewelry } from '../context/JewelryContext';
 import { Language } from '../types/jewelry';
@@ -29,6 +31,8 @@ export const Header: React.FC = () => {
     setIsFilterDrawerOpen,
     setIsSettingsOpen,
     setIsHoursModalOpen,
+    setIsRateCalculatorOpen,
+    setIsEditRatesModalOpen,
     isUploadEnabled,
     theme,
     resolvedTheme,
@@ -68,18 +72,18 @@ export const Header: React.FC = () => {
                 <div className="flex items-center gap-4 shrink-0">
                   <span className="flex items-center gap-1 font-bold text-[#A67C2E] dark:text-[#E5C378]">
                     <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-                    <span>Live Market Rates:</span>
+                    <span>Live Market Rates ({liveRates.date}):</span>
                   </span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">22K:</strong> ₹{liveRates.gold22k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold22kChange}</span>
-                  </span>
-                  <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
-                  <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">24K:</strong> ₹{liveRates.gold24k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold24kChange}</span>
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">22K (916):</strong> ₹{liveRates.gold22k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold22kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold22kChange >= 0 ? `▲ +${liveRates.gold22kChange}` : `▼ ${liveRates.gold22kChange}`}</span>
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">18K:</strong> ₹{liveRates.gold18k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold18kChange}</span>
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">24K:</strong> ₹{liveRates.gold24k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold24kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold24kChange >= 0 ? `▲ +${liveRates.gold24kChange}` : `▼ ${liveRates.gold24kChange}`}</span>
+                  </span>
+                  <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
+                  <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">18K:</strong> ₹{liveRates.gold18k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold18kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold18kChange >= 0 ? `▲ +${liveRates.gold18kChange}` : `▼ ${liveRates.gold18kChange}`}</span>
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
@@ -87,11 +91,11 @@ export const Header: React.FC = () => {
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">1 Tola (22K):</strong> ₹{(liveRates.gold22k * 10).toLocaleString('en-IN')}
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">10g (22K):</strong> ₹{(liveRates.gold22k * 10).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">1 Tola (24K):</strong> ₹{(liveRates.gold24k * 10).toLocaleString('en-IN')}
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">10g (24K):</strong> ₹{(liveRates.gold24k * 10).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">|</span>
                 </div>
@@ -100,18 +104,18 @@ export const Header: React.FC = () => {
                 <div className="flex items-center gap-4 shrink-0">
                   <span className="flex items-center gap-1 font-bold text-[#A67C2E] dark:text-[#E5C378]">
                     <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-                    <span>Live Market Rates:</span>
+                    <span>Live Market Rates ({liveRates.date}):</span>
                   </span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">22K:</strong> ₹{liveRates.gold22k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold22kChange}</span>
-                  </span>
-                  <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
-                  <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">24K:</strong> ₹{liveRates.gold24k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold24kChange}</span>
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">22K (916):</strong> ₹{liveRates.gold22k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold22kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold22kChange >= 0 ? `▲ +${liveRates.gold22kChange}` : `▼ ${liveRates.gold22kChange}`}</span>
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">18K:</strong> ₹{liveRates.gold18k.toLocaleString('en-IN')}/g <span className="text-[#EF4444] text-[10px]">▼ {liveRates.gold18kChange}</span>
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">24K:</strong> ₹{liveRates.gold24k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold24kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold24kChange >= 0 ? `▲ +${liveRates.gold24kChange}` : `▼ ${liveRates.gold24kChange}`}</span>
+                  </span>
+                  <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
+                  <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">18K:</strong> ₹{liveRates.gold18k.toLocaleString('en-IN')}/g <span className={`text-[10px] ${liveRates.gold18kChange >= 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{liveRates.gold18kChange >= 0 ? `▲ +${liveRates.gold18kChange}` : `▼ ${liveRates.gold18kChange}`}</span>
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
@@ -119,11 +123,11 @@ export const Header: React.FC = () => {
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">1 Tola (22K):</strong> ₹{(liveRates.gold22k * 10).toLocaleString('en-IN')}
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">10g (22K):</strong> ₹{(liveRates.gold22k * 10).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">•</span>
                   <span className="text-[#3D3732] dark:text-[#E8EDF2] font-mono">
-                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">1 Tola (24K):</strong> ₹{(liveRates.gold24k * 10).toLocaleString('en-IN')}
+                    <strong className="font-sans font-semibold text-[#A67C2E] dark:text-[#E5C378]">10g (24K):</strong> ₹{(liveRates.gold24k * 10).toLocaleString('en-IN')}
                   </span>
                   <span className="text-[#D9D1C7] dark:text-[#2C3843]">|</span>
                 </div>
@@ -134,6 +138,27 @@ export const Header: React.FC = () => {
 
             {/* Quick Contact, Hours, Language & Quick Theme */}
             <div className="flex items-center gap-1.5 sm:gap-2 ml-auto text-[11px] shrink-0">
+              {/* Rate Calculator Quick Trigger */}
+              <button
+                onClick={() => setIsRateCalculatorOpen(true)}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#10B981] hover:bg-[#059669] text-white font-bold text-[10px] shadow-2xs transition-colors cursor-pointer"
+                title="Open Live Gold & Silver Rate Calculator"
+              >
+                <Calculator className="w-3 h-3" />
+                <span className="hidden sm:inline">Price Calculator</span>
+                <span className="sm:hidden">Calc</span>
+              </button>
+
+              {/* Update Rates Quick Trigger */}
+              <button
+                onClick={() => setIsEditRatesModalOpen(true)}
+                className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-[#1E2730] border border-[#D9D1C7] dark:border-[#2C3843] hover:bg-[#FAF8F5] text-[#3D3732] dark:text-[#FAF7F2] font-semibold text-[10px] transition-colors cursor-pointer"
+                title="Edit / Update Today's Live Rates"
+              >
+                <Edit3 className="w-3 h-3 text-[#C5A059]" />
+                <span>Update Rates</span>
+              </button>
+
               {/* Santej Chokdi Showroom Link (No repeated Ahmedabad) */}
               <a
                 href={shopDetails.googleMapsUrl}

@@ -12,6 +12,8 @@ import { FilterDrawer } from './components/FilterDrawer';
 import { SettingsModal } from './components/SettingsModal';
 import { EditDesignModal } from './components/EditDesignModal';
 import { ShowroomHoursModal } from './components/ShowroomHoursModal';
+import { AhmedabadRateCalculatorModal } from './components/rates/AhmedabadRateCalculatorModal';
+import { EditLiveRatesModal } from './components/rates/EditLiveRatesModal';
 import { Footer } from './components/Footer';
 
 export const AppContent: React.FC = () => {
@@ -45,6 +47,8 @@ export const AppContent: React.FC = () => {
       <FilterDrawer />
       <SettingsModal />
       <ShowroomHoursModal />
+      <AhmedabadRateCalculatorModal />
+      <EditLiveRatesModal />
     </div>
   );
 };
